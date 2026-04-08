@@ -105,8 +105,8 @@ GEM
       mutex_m
       securerandom (>= 0.3)
       tzinfo (~> 2.0)
-    addressable (2.8.6)
-      public_suffix (>= 2.0.2, < 6.0)
+    addressable (2.9.0)
+      public_suffix (>= 2.0.2, < 8.0)
     after_commit_action (1.1.0)
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
@@ -408,7 +408,7 @@ GEM
       premailer (~> 1.7, >= 1.7.9)
     psych (5.1.2)
       stringio
-    public_suffix (5.0.4)
+    public_suffix (7.0.5)
     puma (6.4.3)
       nio4r (~> 2.0)
     racc (1.8.1)
@@ -757,7 +757,7 @@ CHECKSUMS
   activerecord (7.1.6) sha256=1aa298cd7fc97ed8639ebb05a46bd17243a1218d89945bdc2bac1e61e673f079
   activestorage (7.1.6) sha256=2f1acb8e6592ba783d9cbc3da93ac4477d441dffc5d533ceccbbfab39f4bf398
   activesupport (7.1.6) sha256=7f12140a813b1c4922a322663e547129aef1840fc512fa262378f6d7e7fd3a7c
-  addressable (2.8.6) sha256=798f6af3556641a7619bad1dce04cdb6eb44b0216a991b0396ea7339276f2b47
+  addressable (2.9.0) sha256=7fdf6ac3660f7f4e867a0838be3f6cf722ace541dd97767fa42bc6cfa980c7af
   after_commit_action (1.1.0) sha256=28a4730735a042127ddee9246334a087fbbe1c20f28791509ddbdc8723017238
   annotate (3.2.0) sha256=9a61baa1fb13880aa3a8d9f62553889bb2a3b7970f88bbc66d3ac75a567780d3
   api-pagination (4.8.2) sha256=f8d24ab84f7b0cc470a7793946255e33fa69873b9b14c007b368742dc86fea9d
@@ -907,7 +907,7 @@ CHECKSUMS
   premailer (1.21.0) sha256=64b9e07ed4a7a8079446a45902f1967cc31d95d14a64fd3905c2fb417ee33f83
   premailer-rails (1.12.0) sha256=c13815d161b9bc7f7d3d81396b0bb0a61a90fa9bd89931548bf4e537c7710400
   psych (5.1.2) sha256=337322f58fc2bf24827d2b9bd5ab595f6a72971867d151bb39980060ea40a368
-  public_suffix (5.0.4) sha256=35cd648e0d21d06b8dce9331d19619538d1d898ba6d56a6f2258409d2526d1ae
+  public_suffix (7.0.5) sha256=1a8bb08f1bbea19228d3bed6e5ed908d1cb4f7c2726d18bd9cadf60bc676f623
   puma (6.4.3) sha256=24a4645c006811d83f2480057d1f54a96e7627b6b90e1c99b260b9dc630eb43e
   racc (1.8.1) sha256=4a7f6929691dbec8b5209a0b373bc2614882b55fc5d2e447a21aaa691303d62f
   rack (2.2.23) sha256=a8fe9d7e07064770b8ec123663fded8a59ef7e2b6db5cda7173d45a5718ab69c
