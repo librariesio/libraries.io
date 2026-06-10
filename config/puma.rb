@@ -41,7 +41,7 @@ preload_app!
 # or connections that may have been created at application boot, Ruby
 # cannot share connections between processes.
 #
-on_worker_boot do
+before_worker_boot do
   ActiveRecord::Base.establish_connection
 
   uri = ENV["REDISCLOUD_URL"] || "redis://localhost:6379/"
