@@ -60,11 +60,16 @@ describe "Api::ProjectsController" do
   end
 
   describe "GET /api/:platform/:name/dependent_repositories", type: :request do
-    it "renders successfully" do
-      get "/api/#{project.platform}/#{project.name}/dependent_repositories"
+    it "renders successfully with an api key" do
+      get "/api/#{project.platform}/#{project.name}/dependent_repositories?api_key=#{user.api_key}"
       expect(response).to have_http_status(:success)
       expect(response.content_type).to start_with("application/json")
       expect(response.body).to be_json_eql []
+    end
+
+    it "returns unauthorized without an api key" do
+      get "/api/#{project.platform}/#{project.name}/dependent_repositories"
+      expect(response).to have_http_status(:unauthorized)
     end
   end
 

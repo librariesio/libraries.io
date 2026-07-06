@@ -2,7 +2,7 @@
 
 class Api::ProjectsController < Api::ApplicationController
   before_action :find_project, except: %i[searchcode dependencies dependencies_bulk updated]
-  before_action :require_api_key, only: %i[dependencies dependencies_bulk]
+  before_action :require_api_key, only: %i[dependencies dependencies_bulk dependent_repositories]
   before_action :require_internal_api_key, only: :sync
 
   def show

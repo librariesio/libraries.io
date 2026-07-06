@@ -5,6 +5,7 @@ require "rails_helper"
 describe "Api::RepositoriesController" do
   let!(:repository) { create(:repository) }
   let!(:maintenance_stat) { create(:repository_maintenance_stat, repository: repository) }
+  let(:user) { create(:user) }
   let(:internal_user) { create(:user) }
 
   before do
@@ -16,8 +17,13 @@ describe "Api::RepositoriesController" do
     let!(:version) { create(:version, project: project) }
     let!(:dependency) { create(:dependency, version: version) }
 
-    it "renders successfully" do
+    it "returns unauthorized without an api key" do
       get "/api/github/#{repository.full_name}/dependencies"
+      expect(response).to have_http_status(:unauthorized)
+    end
+
+    it "renders successfully" do
+      get "/api/github/#{repository.full_name}/dependencies", params: { api_key: user.api_key }
       expect(response).to have_http_status(:success)
       expect(response.content_type).to start_with("application/json")
       expect(json.to_json).to be_json_eql(
@@ -92,8 +98,13 @@ describe "Api::RepositoriesController" do
   end
 
   describe "GET /api/github/:owner/:name/projects", type: :request do
-    it "renders successfully" do
+    it "returns unauthorized without an api key" do
       get "/api/github/#{repository.full_name}/projects"
+      expect(response).to have_http_status(:unauthorized)
+    end
+
+    it "renders successfully" do
+      get "/api/github/#{repository.full_name}/projects", params: { api_key: user.api_key }
       expect(response).to have_http_status(:success)
       expect(response.content_type).to start_with("application/json")
       expect(json).to eq []
@@ -144,6 +155,11 @@ describe "Api::RepositoriesController" do
     let(:params) { { api_key: internal_user.api_key } }
 
     it_behaves_like "repository#show"
+
+    it "returns unauthorized without an api key" do
+      get url
+      expect(response).to have_http_status(:unauthorized)
+    end
   end
 
   describe "GET /api/github/repository", type: :request do
@@ -151,6 +167,11 @@ describe "Api::RepositoriesController" do
     let(:params) { { api_key: internal_user.api_key, owner: repository.owner_name, name: repository.project_name } }
 
     it_behaves_like "repository#show"
+
+    it "returns unauthorized without an api key" do
+      get url, params: { owner: repository.owner_name, name: repository.project_name }
+      expect(response).to have_http_status(:unauthorized)
+    end
 
     it "returns error on missing owner param" do
       get url, params: params.except(:owner)

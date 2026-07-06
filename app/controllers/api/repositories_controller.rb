@@ -2,6 +2,7 @@
 
 class Api::RepositoriesController < Api::ApplicationController
   before_action :find_repo, except: :search
+  before_action :require_api_key, only: %i[show projects dependencies]
   before_action :require_internal_api_key, only: %i[sync project_names]
 
   def show
