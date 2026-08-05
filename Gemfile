@@ -51,7 +51,7 @@ gem "mail", require: ["mail", "mail/utilities", "mail/parsers"]
 gem "marginalia"
 gem "mime-types", require: "mime/types/columnar"
 gem "net-imap", ">= 0.5.14"
-gem "nokogiri", ">= 1.19.3"
+gem "nokogiri", ">= 1.19.4"
 gem "octicons_helper"
 gem "octokit"
 gem "oj"
