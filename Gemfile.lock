@@ -355,7 +355,9 @@ GEM
     octokit (4.16.0)
       faraday (>= 0.9)
       sawyer (~> 0.8.0, >= 0.5.3)
-    oj (3.13.8)
+    oj (3.17.5)
+      bigdecimal (>= 3.0)
+      ostruct (>= 0.2)
     omniauth (2.1.1)
       hashie (>= 3.4.6)
       rack (>= 2.2.3)
@@ -376,6 +378,7 @@ GEM
       omniauth (~> 2.0)
     org-ruby (0.9.12)
       rubypants (~> 0.2)
+    ostruct (0.6.3)
     ox (2.14.23)
       bigdecimal (>= 3.0)
     packageurl-ruby (0.2.0)
@@ -886,7 +889,7 @@ CHECKSUMS
   octicons (8.5.0) sha256=e5f841892e40edec91527a667c0d6f751f0d43fc62cdd17b4345d1ea2ed4c63b
   octicons_helper (8.5.0) sha256=8c3c5548c85e437ad363d7d6a13a1fe379bcf84b2761c212d731da1f64d0b5c8
   octokit (4.16.0) sha256=76c26da61478c866df8065966b5c7ca7bcc1956a24a27d0b2662168551117d1a
-  oj (3.13.8) sha256=cfa8c2ff90a6376c426fe9965fbced865f2427461ae9dcc7c5aa187fc1dc65f2
+  oj (3.17.5) sha256=2f2150c335f53d19350394bcbb3d3d5de1a65f19963908d10c969cb27477efa2
   omniauth (2.1.1) sha256=f2e43fc889fd915838bd1c812569e7e8211b7a1a53d1e0dbb9f694a163d7b297
   omniauth-atlassian-bitbucket (0.1.0) sha256=8b563f8eb538e0f89886647abe745c8a51eaf6be8b7ae398eed7dbb2502848c9
   omniauth-github (2.0.1) sha256=8ff8e70ac6d6db9d52485eef52cfa894938c941496e66b52b5e2773ade3ccad4
@@ -894,6 +897,7 @@ CHECKSUMS
   omniauth-oauth2 (1.8.0) sha256=b2f8e9559cc7e2d4efba57607691d6d2b634b879fc5b5b6ccfefa3da85089e78
   omniauth-rails_csrf_protection (1.0.1) sha256=fc546aeb7d43b7b9d7737051c380156e61c8f080b898cd4934d523eaa7e59acf
   org-ruby (0.9.12) sha256=93cbec3a4470cb9dca6a4a98dc276a6434ea9d9e7bc2d42ea33c3aedd5d1c974
+  ostruct (0.6.3) sha256=95a2ed4a4bd1d190784e666b47b2d3f078e4a9efda2fccf18f84ddc6538ed912
   ox (2.14.23) sha256=4a9aedb4d6c78c5ebac1d7287dc7cc6808e14a8831d7adb727438f6a1b461b66
   packageurl-ruby (0.2.0) sha256=9bef22c96622b7d3a0087a7fbca8903f9187b66fbfd6a78299ef115768f5012b
   parallel (1.23.0) sha256=27154713ad6ef32fa3dcb7788a721d6c07bca77e72443b4c6080a14145288c49
