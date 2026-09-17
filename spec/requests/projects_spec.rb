@@ -59,6 +59,19 @@ RSpec.describe ProjectsController do
     end
   end
 
+  describe "GET #show for a version" do
+    it "redirects to login when not authenticated" do
+      visit version_path(version.to_param)
+      expect(page).to have_content "You must be logged in to view this content."
+    end
+
+    it "responds successfully when authenticated" do
+      login(create(:user))
+      visit version_path(version.to_param)
+      expect(page).to have_content project.name
+    end
+  end
+
   describe "GET #sourcerank" do
     it "responds successfully", type: :request do
       visit project_sourcerank_path(project.to_param)
