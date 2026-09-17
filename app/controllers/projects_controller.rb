@@ -3,6 +3,7 @@
 class ProjectsController < ApplicationController
   before_action :ensure_logged_in, only: %i[your_dependent_repos mute unmute
                                             unsubscribe sync]
+  before_action :ensure_logged_in, only: %i[show], if: -> { request.path_parameters[:number].present? }
   before_action :find_project, only: %i[
     about
     dependencies
