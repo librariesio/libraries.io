@@ -147,7 +147,7 @@ class ApplicationController < ActionController::Base
   end
 
   def find_project
-    @project = Project.find_best!(params[:platform], params[:name], %i[repository versions])
+    @project = Project.find_best!(params[:platform], params[:name], %i[repository])
 
     # There could be projects in the db whose package managers have since been removed
     raise ActiveRecord::RecordNotFound unless @project.platform_class_exists?
