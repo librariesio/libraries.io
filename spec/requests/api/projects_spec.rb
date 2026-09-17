@@ -40,6 +40,23 @@ describe "Api::ProjectsController" do
       expected_response[:updated_at] = project.updated_at.iso8601(3)
       expect(response.body).to be_json_eql expected_response.to_json
     end
+
+    it "does not query versions on a cache hit" do
+      allow(Rails).to receive(:cache).and_return(ActiveSupport::Cache::MemoryStore.new)
+
+      # warm the cache
+      get "/api/#{project.platform}/#{project.name}"
+      expect(response).to have_http_status(:success)
+
+      queries = []
+      subscriber = ->(_, _, _, _, values) { queries << values[:sql] }
+      ActiveSupport::Notifications.subscribed(subscriber, "sql.active_record") do
+        get "/api/#{project.platform}/#{project.name}"
+      end
+
+      expect(response).to have_http_status(:success)
+      expect(queries.grep(/from\s+"?versions"?/i)).to be_empty
+    end
   end
 
   # Disabled for performance reasons
