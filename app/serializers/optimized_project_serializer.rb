@@ -88,6 +88,7 @@ class OptimizedProjectSerializer
   def versions_by_project_id
     @versions_by_project_id ||= Version
       .where(project_id: @projects.map(&:id))
+      .order(:id)
       .pluck(:project_id, :created_at, *VERSION_ATTRIBUTES)
       .group_by(&:first)
       .transform_values do |versions_values|
