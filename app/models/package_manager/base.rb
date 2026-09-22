@@ -331,7 +331,7 @@ module PackageManager
           # call to dependencies() from the platform provider
           if force_sync_dependencies
             StructuredLog.capture("SAVE_DEPENDENCIES_FULL_REFRESH", { platform: db_platform, name: name, version: db_version.number, source: source })
-            db_version.dependencies.destroy_all
+            db_version.dependencies.delete_all
           end
 
           existing_dep_names = db_version.dependencies.map(&:project_name)
