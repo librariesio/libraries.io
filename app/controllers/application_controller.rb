@@ -8,62 +8,9 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_user, :logged_in?, :logged_out?, :current_host, :formatted_host, :tidelift_flash_partial
 
-  before_action :extract_amplitude_device_id
-  after_action :track_page_view
   around_action :trace_span
 
   private
-
-  # Call from controllers to add additional properties to the Page Viewed
-  # tracking event
-  # @param properties [Hash]
-  def add_tracking_properties(properties)
-    @additional_tracking_properties ||= {}
-    @additional_tracking_properties.merge!(properties)
-  end
-
-  def extract_amplitude_device_id
-    AmplitudeService.request_ip = request.remote_ip
-    @amplitude_enabled_for_request = AmplitudeService.enabled_for_request?
-    return unless @amplitude_enabled_for_request
-
-    cookie_name = "AMP_#{Rails.configuration.amplitude_api_key.first(10)}"
-    amplitude_cookie = request.cookies[cookie_name]
-    return unless amplitude_cookie
-
-    # The cookie is base64 encoded and url encoded
-    base64_decoded_cookie = Base64.decode64(amplitude_cookie)
-    decoded_cookie = CGI.unescape(base64_decoded_cookie)
-    cookie_data = JSON.parse(decoded_cookie)
-    @amplitude_request_data = {
-      device_id: cookie_data["deviceId"],
-      session_id: cookie_data["sessionId"],
-      ip: request.remote_ip,
-      user_agent: request.user_agent,
-    }
-  rescue StandardError => e
-    # don't allow analytics to break the app
-    Bugsnag.notify(e)
-  end
-
-  def track_page_view
-    return if request.xhr?
-
-    event_properties = {
-      url: request.original_url,
-      referrer_url: request.referrer,
-      controller: controller_name,
-      action: action_name,
-      params: request.filtered_parameters.except(:controller, :action, :format),
-    }.merge(@additional_tracking_properties || {})
-
-    AmplitudeService.event(
-      event_type: AmplitudeService::EVENTS[:page_viewed],
-      event_properties: event_properties,
-      user: current_user,
-      request_data: @amplitude_request_data
-    )
-  end
 
   def trace_span(&block)
     Datadog::Tracing.trace("endpoint##{controller_path}##{action_name}") do |_span, _trace|
