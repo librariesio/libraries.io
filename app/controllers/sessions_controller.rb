@@ -50,21 +50,9 @@ class SessionsController < ApplicationController
       session[:user_id] = identity.user.id
     end
 
-    previous_last_login_at = identity.user.last_login_at
     identity.user.update_columns(last_login_at: Time.current)
     identity.user.update_repo_permissions_async
     login_destination = pre_login_destination
-
-    AmplitudeService.event(
-      event_type: AmplitudeService::EVENTS[:login_successful],
-      event_properties: {
-        account_type: identity.provider,
-        last_login: previous_last_login_at,
-        referrer_url: request.referrer,
-      },
-      user: identity.user,
-      request_data: @amplitude_request_data
-    )
 
     redirect_to login_destination || root_path
   end

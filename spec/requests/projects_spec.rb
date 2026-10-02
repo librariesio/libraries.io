@@ -15,46 +15,18 @@ RSpec.describe ProjectsController do
   end
 
   describe "GET #show" do
-    before do
-      allow(AmplitudeService).to receive(:event)
-    end
-
     it "responds successfully", type: :request do
       visit project_path(project.to_param)
       expect(page).to have_content project.name
-
-      expect(AmplitudeService).to have_received(:event).with(
-        hash_including(
-          user: nil,
-          request_data: nil
-        )
-      )
     end
 
     context "with authenticated user" do
       let(:user) { create(:user) }
 
-      it "logs to amplitude" do
+      it "responds successfully" do
         login(user)
         visit project_path(project.to_param)
         expect(page).to have_content project.name
-
-        expect(AmplitudeService).to have_received(:event).with(
-          event_properties: {
-            action: "show",
-            controller: "projects",
-            lifted: false,
-            params: {
-              "name" => "super_package",
-              "platform" => "rubygems",
-            },
-            referrer_url: nil,
-            url: "http://www.example.com/rubygems/super_package",
-          },
-          event_type: "Page Viewed",
-          user: user,
-          request_data: nil
-        )
       end
     end
   end
