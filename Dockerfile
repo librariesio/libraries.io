@@ -1,4 +1,4 @@
-FROM ruby:3.2.6
+FROM ruby:3.4.12
 RUN apt-get update -qq && apt-get install -y build-essential libxml2-dev libpq-dev libxslt1-dev nodejs libicu-dev cmake git
 RUN curl -sSL https://sdk.cloud.google.com | CLOUDSDK_INSTALL_DIR=/usr/local bash
 ENV PATH $PATH:/usr/local/google-cloud-sdk/bin
