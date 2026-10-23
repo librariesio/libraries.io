@@ -46,7 +46,8 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
-      - ruby/rspec-test
+      - ruby/rspec-test:
+          suite-name: rspec
 
   lint:
     parallelism: 1
