@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  ruby: circleci/ruby@2.3.1
+  ruby: cimg/ruby@2.3.1
 
 executors:
   # TODO: we don't need ES/PG/Redis for "lint" job, so we could create another
@@ -12,7 +12,7 @@ executors:
         environment:
           PGHOST: 127.0.0.1
           PGUSER: postgres
-      - image: circleci/postgres:9.6-alpine
+      - image: cimg/postgres:9.6-alpine
         environment:
           POSTGRES_USER: postgres
           POSTGRES_DB: libraries_test
