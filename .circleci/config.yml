@@ -7,6 +7,7 @@ executors:
   # stripped-down executor if we want?
   libraries:
     working_directory: ~/libraries
+    resource_class: large
     docker:
       - image: cimg/ruby:3.4.12-node
         environment:
