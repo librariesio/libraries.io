@@ -224,11 +224,11 @@ GEM
     ethon (0.16.0)
       ffi (>= 1.15.0)
     execjs (2.8.1)
-    factory_bot (6.2.1)
-      activesupport (>= 5.0.0)
-    factory_bot_rails (6.2.0)
-      factory_bot (~> 6.2.0)
-      railties (>= 5.0.0)
+    factory_bot (6.6.0)
+      activesupport (>= 6.1.0)
+    factory_bot_rails (6.5.1)
+      factory_bot (~> 6.5)
+      railties (>= 6.1.0)
     faker (3.2.1)
       i18n (>= 1.8.11, < 2)
     faraday (0.17.6)
@@ -483,6 +483,9 @@ GEM
       io-console (~> 0.5)
     request_store (1.4.1)
       rack (>= 1.4)
+    resolv (0.8.1)
+    resolv-replace (0.2.0)
+      resolv
     rexml (3.4.4)
     rspec (3.13.0)
       rspec-core (~> 3.13.0)
@@ -669,7 +672,7 @@ DEPENDENCIES
   elasticsearch-model (~> 5)
   elasticsearch-rails (~> 5)
   escape_utils
-  factory_bot_rails (~> 6.2.0)
+  factory_bot_rails (~> 6.5)
   faker
   faraday-http-cache
   faraday_middleware
@@ -725,6 +728,7 @@ DEPENDENCIES
   rainbow (~> 3)
   rdoc
   redis
+  resolv-replace
   rexml (>= 3.4.2)
   rspec-rails
   rspec-sidekiq
@@ -831,8 +835,8 @@ CHECKSUMS
   escape_utils (1.2.1) sha256=e5292fe8d7e12a9bcb4502d99e28fb602e4e1514690d98a1c4957f6f77b4b162
   ethon (0.16.0) sha256=bba0da1cea8ac3e1f5cdd7cb1cb5fc78d7ac562c33736f18f0c3eb2b63053d9e
   execjs (2.8.1) sha256=6d939919cfd81bcc4d6556f322c3995a70cfe4289ea0bd3b1f999b489c323088
-  factory_bot (6.2.1) sha256=f863e5a7873ef1c6446fdcef8dbb87dc4c3b893d5f75184ae09063d30449d3dd
-  factory_bot_rails (6.2.0) sha256=278b969666b078e76e1c972c501da9b1fac15e5b0ff328cc7ce400366164d0a1
+  factory_bot (6.6.0) sha256=1fc1b3b5620ec980a6a27aec1b6ec8c250ca82962e970e8a40f93e8d388d4b89
+  factory_bot_rails (6.5.1) sha256=d3cc4851eae4dea8a665ec4a4516895045e710554d2b5ac9e68b94d351bc6d68
   faker (3.2.1) sha256=d6b201b520213f6d985ac9f9f810154397a146ca22c1d3ff0a6504ef37c5517b
   faraday (0.17.6) sha256=a572118695fce2937e3a8bed33498ac0c25a263cdb570ea5cd2e41b36c821c34
   faraday-http-cache (2.5.0) sha256=64b7366d66e508e1c3dd855ebb20ce9da429330e412a23d9ebbc0a7a7b227463
@@ -947,6 +951,8 @@ CHECKSUMS
   regexp_parser (2.8.1) sha256=83f63e2bfae3db38f988c66f114485140ff1791321fd827480bc75aa42cacb8c
   reline (0.5.8) sha256=467faa77616677035786819d7d2e6cfa048be64542c10d8eda81dacd939aea02
   request_store (1.4.1) sha256=cdd0ff614c9ed70073b914b790aa41d02ef67c18c2a3e8041ad30df0c118c3a4
+  resolv (0.8.1) sha256=7452071b413d0b63054654e4646f07dc717f3e5d3ed1c7dfaf34f7f054d13027
+  resolv-replace (0.2.0) sha256=76d2c92dc6a744b9e27a915d1962b641c52e2c6ef6662a23335672a3ca593b30
   rexml (3.4.4) sha256=19e0a2c3425dfbf2d4fc1189747bdb2f849b6c5e74180401b15734bc97b5d142
   rspec (3.13.0) sha256=d490914ac1d5a5a64a0e1400c1d54ddd2a501324d703b8cfe83f458337bab993
   rspec-core (3.13.2) sha256=94fbda6e4738e478f1c7532b7cc241272fcdc8b9eac03a97338b1122e4573300
@@ -1017,7 +1023,7 @@ CHECKSUMS
   zeitwerk (2.7.1) sha256=0945986050e4907140895378e74df1fe882a2271ed087cc6c6d6b00d415a2756
 
 RUBY VERSION
-   ruby 3.2.6p234
+   ruby 3.4.12p148
 
 BUNDLED WITH
    2.6.2

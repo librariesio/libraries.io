@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 source "https://rubygems.org"
-ruby "3.2.6"
+ruby "3.4.12"
 
 gem "active_model_serializers"
 gem "api-pagination"
@@ -78,6 +78,7 @@ gem "rails-timeago", git: "https://github.com/librariesio/rails-timeago"
 gem "rainbow", "~> 3"
 gem "rdoc"
 gem "redis"
+gem "resolv-replace"
 gem "rexml", ">= 3.4.2"
 gem "rubyzip", "~> 2.3.0"
 gem "sanitize-url"
@@ -117,7 +118,7 @@ group :test do
   gem "database_cleaner", "~> 2.1.0"
   gem "database_cleaner-active_record", "~> 2.2.0"
   gem "db-query-matchers"
-  gem "factory_bot_rails", "~> 6.2.0"
+  gem "factory_bot_rails", "~> 6.5"
   gem "faker"
   gem "json_spec"
   gem "rspec_junit_formatter"
