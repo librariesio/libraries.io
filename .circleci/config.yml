@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  ruby: cimg/ruby@2.3.1
+  ruby: circleci/ruby@4.0.0
 
 executors:
   # TODO: we don't need ES/PG/Redis for "lint" job, so we could create another
