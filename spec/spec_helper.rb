@@ -3,7 +3,7 @@
 require "simplecov"
 require "custom_matchers"
 require "audited/rspec_matchers"
-SimpleCov.start "rails"
+SimpleCov.start "rails" if ENV["COVERAGE"]
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
