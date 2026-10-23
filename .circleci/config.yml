@@ -12,7 +12,7 @@ executors:
         environment:
           PGHOST: 127.0.0.1
           PGUSER: postgres
-      - image: cimg/postgres:9.6-alpine
+      - image: cimg/postgres:9.6
         environment:
           POSTGRES_USER: postgres
           POSTGRES_DB: libraries_test
