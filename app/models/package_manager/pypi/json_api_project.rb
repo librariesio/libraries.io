@@ -35,6 +35,10 @@ module PackageManager
         @data.dig("info", "license")
       end
 
+      def license_expression
+        @data.dig("info", "license_expression")
+      end
+
       def license_classifiers
         license_classifiers = classifiers.select { |c| c.start_with?("License :: ") }
         license_classifiers.map { |l| l.split(":: ").last }.join(",")
@@ -66,7 +70,7 @@ module PackageManager
       end
 
       def licenses
-        license.presence || license_classifiers
+        license_expression.presence || license.presence || license_classifiers
       end
 
       REPOSITORY_PROJECT_URL_FIELDS = ["Source", "Source Code", "Repository", "Code", "GitHub", "Github"].flat_map do |field|
