@@ -86,6 +86,21 @@ describe PackageManager::Pypi::JsonApiProject do
       end
     end
 
+    context "with a license expression" do
+      let(:data) do
+        {
+          "info" => {
+            "license_expression" => "MIT",
+            "classifiers" => [],
+          },
+        }
+      end
+
+      it "detects from the license expression" do
+        expect(project.licenses).to eq("MIT")
+      end
+    end
+
     context "with nil classifiers" do
       let(:data) do
         {
