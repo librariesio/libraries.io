@@ -1,11 +1,15 @@
 # frozen_string_literal: true
 
+require "tmpdir"
+
 module PackageManager
   class CRAN < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
     URL = "https://cran.r-project.org/"
     COLOR = "#198CE7"
+    # Names and versions are used in URLs and filesystem paths, so reject anything unexpected.
+    SAFE_SEGMENT = /\A[A-Za-z0-9][A-Za-z0-9._-]*\z/
 
     def self.package_link(db_project, _version = nil)
       "https://cran.r-project.org/package=#{db_project.name}"
@@ -33,6 +37,8 @@ module PackageManager
     end
 
     def self.project(name)
+      return unless SAFE_SEGMENT.match?(name.to_s)
+
       html = get_html("https://cran.r-project.org/web/packages/#{name}/index.html", request: { timeout: 5 })
       info = {}
       table = html.css("table")[0]
@@ -94,35 +100,39 @@ module PackageManager
     end
 
     def self.find_dependencies(name, version)
+      return [] unless SAFE_SEGMENT.match?(name.to_s) && SAFE_SEGMENT.match?(version.to_s)
+
+      url = "https://cran.rstudio.com/src/contrib/#{name}_#{version}.tar.gz"
       begin
-        url = "https://cran.rstudio.com/src/contrib/#{name}_#{version}.tar.gz"
-        head_response = Typhoeus.head(url)
-        raise if head_response.code != 200
+        raise if Typhoeus.head(url).code != 200
       rescue StandardError
         url = "https://cran.rstudio.com/src/contrib/Archive/#{name}/#{name}_#{version}.tar.gz"
       end
 
-      folder_name = "#{name}_#{version}"
-      tarball_name = "#{folder_name}.tar.gz"
-      downloaded_file = File.open "/tmp/#{tarball_name}", "wb"
-      request = Typhoeus::Request.new(url)
-      request.on_headers do |response|
-        return [] if response.code != 200
+      Dir.mktmpdir("cran_") do |tmp_dir|
+        tarball = File.join(tmp_dir, "package.tar.gz")
+        return [] unless download_tarball(url, tarball)
+
+        contents = read_description(tarball, File.join(tmp_dir, "package"))
+        Bibliothecary.analyse_file("DESCRIPTION", contents).first.fetch(:dependencies)
       end
-      request.on_body { |chunk| downloaded_file.write(chunk) }
-      request.on_complete { downloaded_file.close }
-      request.run
+    end
 
-      `mkdir /tmp/#{folder_name} && tar xvzf /tmp/#{tarball_name} -C /tmp/#{folder_name}  --strip-components 1`
+    def self.download_tarball(url, path)
+      success = true
+      File.open(path, "wb") do |file|
+        request = Typhoeus::Request.new(url)
+        request.on_headers { |response| success = false if response.code != 200 }
+        request.on_body { |chunk| file.write(chunk) if success }
+        request.run
+      end
+      success
+    end
 
-      contents = `cat /tmp/#{folder_name}/DESCRIPTION`
-
-      `rm -rf /tmp/#{folder_name} /tmp/#{tarball_name}`
-
-      Bibliothecary.analyse_file("DESCRIPTION", contents).first.fetch(:dependencies)
-    ensure
-      `rm -rf /tmp/#{folder_name} /tmp/#{tarball_name}`
-      []
+    def self.read_description(tarball, dest_dir)
+      FileUtils.mkdir_p(dest_dir)
+      system("tar", "xzf", tarball, "-C", dest_dir, "--strip-components", "1", out: File::NULL, err: File::NULL)
+      File.read(File.join(dest_dir, "DESCRIPTION"))
     end
   end
 end

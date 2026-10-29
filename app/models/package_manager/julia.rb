@@ -6,6 +6,8 @@ module PackageManager
     HAS_DEPENDENCIES = false
     URL = "http://pkg.julialang.org/"
     COLOR = "#a270ba"
+    # Names are used as filesystem path segments, so reject anything that could traverse or escape.
+    SAFE_NAME = /\A[A-Za-z0-9_][A-Za-z0-9_.+-]*\z/
 
     def self.package_link(db_project, _version = nil)
       "http://pkg.julialang.org/?pkg=#{db_project.name}&ver=release"
@@ -16,8 +18,15 @@ module PackageManager
     end
 
     def self.project(name)
-      versions = `ls METADATA.jl/#{name}/versions`.split("\n").sort
-      repository_url = `cat METADATA.jl/#{name}/url`
+      return unless SAFE_NAME.match?(name)
+
+      dir = File.join("METADATA.jl", name)
+      versions_dir = File.join(dir, "versions")
+      url_file = File.join(dir, "url")
+      return unless File.directory?(versions_dir) && File.file?(url_file)
+
+      versions = Dir.children(versions_dir).sort
+      repository_url = File.read(url_file)
       {
         name: name,
         versions: versions,

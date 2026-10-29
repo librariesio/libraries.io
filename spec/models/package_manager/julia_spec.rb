@@ -18,4 +18,15 @@ describe PackageManager::Julia do
       expect(described_class.package_link(project, "2.0.0")).to eq("http://pkg.julialang.org/?pkg=foo&ver=release")
     end
   end
+
+  describe ".project" do
+    it "does not shell out or touch the filesystem for names with shell metacharacters" do
+      expect(described_class).not_to receive(:`)
+      expect(File).not_to receive(:read)
+
+      ["foo;touch /tmp/pwned", "foo$(id)", "../etc", "foo bar", "", ".hidden"].each do |name|
+        expect(described_class.project(name)).to be_nil
+      end
+    end
+  end
 end

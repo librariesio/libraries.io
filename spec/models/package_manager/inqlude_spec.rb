@@ -28,4 +28,15 @@ describe PackageManager::Inqlude do
       expect(described_class.install_instructions(project, "2.0.0")).to eq("inqlude install foo")
     end
   end
+
+  describe ".project" do
+    it "does not shell out or touch the filesystem for names with shell metacharacters" do
+      expect(described_class).not_to receive(:`)
+      expect(File).not_to receive(:read)
+
+      ["foo;touch /tmp/pwned", "foo$(id)", "../etc", "foo bar", "", ".hidden"].each do |name|
+        expect(described_class.project(name)).to be_nil
+      end
+    end
+  end
 end

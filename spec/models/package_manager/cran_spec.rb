@@ -32,4 +32,25 @@ describe PackageManager::CRAN do
       expect(described_class.documentation_url("foo")).to eq("http://cran.r-project.org/web/packages/foo/foo.pdf")
     end
   end
+
+  describe ".project" do
+    it "rejects names that are not safe path segments without making a request" do
+      expect(described_class).not_to receive(:get_html)
+
+      ["foo;touch /tmp/pwned", "foo$(id)", "../etc", "", ".hidden"].each do |name|
+        expect(described_class.project(name)).to be_nil
+      end
+    end
+  end
+
+  describe ".find_dependencies" do
+    it "rejects unsafe names or versions without shelling out or making a request" do
+      expect(Typhoeus).not_to receive(:head)
+      expect(described_class).not_to receive(:`)
+      expect(described_class).not_to receive(:system)
+
+      expect(described_class.find_dependencies("foo;touch /tmp/pwned", "1.0")).to eq([])
+      expect(described_class.find_dependencies("foo", "1.0$(id)")).to eq([])
+    end
+  end
 end
