@@ -193,8 +193,6 @@ Rails.application.routes.draw do
   get "/data", to: redirect("/")
   get "/open-data", to: redirect("/")
 
-  post "/hooks/package", to: "hooks#package"
-
   get "/:platform/:name/suggestions", to: "project_suggestions#new", as: :project_suggestions, constraints: { name: /.*/ }
   post "/:platform/:name/suggestions", to: "project_suggestions#create", constraints: { name: /.*/ }
 
