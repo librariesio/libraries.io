@@ -63,6 +63,8 @@ class Tag < ApplicationRecord
   end
 
   def notify_subscribers
+    return unless Rails.application.config.version_emails_enabled
+
     repository.projects.without_versions.each do |project|
       project.mailing_list(include_prereleases: prerelease?).each do |user|
         VersionsMailer.new_version(user, project, self).deliver_later

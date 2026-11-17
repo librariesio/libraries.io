@@ -91,6 +91,8 @@ class Version < ApplicationRecord
   end
 
   def notify_subscribers
+    return unless Rails.application.config.version_emails_enabled
+
     project.mailing_list(include_prereleases: prerelease?).each do |user|
       next if user.muted?(project)
 

@@ -15,10 +15,19 @@ describe Tag, type: :model do
     let(:project) { create(:project, repository: repository) }
     let(:user) { create(:user) }
     it "notifies subscribers" do
+      allow(Rails.application.config).to receive(:version_emails_enabled).and_return(true)
       Subscription.create(project: project, user: user)
       tag = Tag.create(repository: repository, name: "somename", sha: "somesha")
       allow_any_instance_of(VersionsMailer).to receive(:new_version).with(anything).and_return(true)
       expect(tag.notify_subscribers.count).to eq 1
+    end
+
+    it "sends nothing when version emails are disabled" do
+      allow(Rails.application.config).to receive(:version_emails_enabled).and_return(false)
+      Subscription.create(project: project, user: user)
+      tag = Tag.create(repository: repository, name: "somename", sha: "somesha")
+      expect(VersionsMailer).not_to receive(:new_version)
+      tag.notify_subscribers
     end
   end
 end
