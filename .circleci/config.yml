@@ -9,7 +9,7 @@ executors:
     working_directory: ~/libraries
     resource_class: large
     docker:
-      - image: cimg/ruby:3.4.12-node
+      - image: cimg/ruby:3.4.13-node
         environment:
           PGHOST: 127.0.0.1
           PGUSER: postgres

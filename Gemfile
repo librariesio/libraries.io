@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 source "https://rubygems.org"
-ruby "3.4.12"
+ruby "3.4.13"
 
 gem "active_model_serializers"
 gem "api-pagination"
